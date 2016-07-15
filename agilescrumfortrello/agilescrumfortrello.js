@@ -234,15 +234,15 @@ AST = (function ( A ) {
 							.css('line-height', '1.2em');
 					}
 
-
-
-					// Update list Story Points
-					currentListDone 	= currentListDone + currentCardDone;
-					currentListTotal 	= currentListTotal + currentCardTotal;
-
+					// Update list Story Points only if card is shown
+					// If current card is hidden (by filtering), don't count story points
+					if (_isCardShown(currentCardElement)) {
+						currentListDone 	= currentListDone + currentCardDone;
+						currentListTotal 	= currentListTotal + currentCardTotal;
+					}
 
 					// Update header Story Points if there is a current one
-					if ( currentHeaderElement )
+					if ((currentHeaderElement) && _isCardShown(currentCardElement))
 					{
 						currentHeaderDone  = currentHeaderDone + currentCardDone;
 						currentHeaderTotal = currentHeaderTotal + currentCardTotal;
@@ -264,10 +264,14 @@ AST = (function ( A ) {
 				{
 					_finishHeader();
 				}
-
-				// display List Story Points
-				currentListElement.parent().prepend('<small class="scrum-list-total' + cssStoryPoints + '"><span class="scrum-light">' + currentListDone.toFixed( storyPointDecimals ) + '/</span>' + currentListTotal.toFixed( storyPointDecimals ) + '</small>');
-
+                
+                //Display List Story Points
+                var currentListDoneDisp = currentListDone.toFixed(storyPointDecimals);
+                var currentListTotalDisp = currentListTotal.toFixed(storyPointDecimals);                
+                currentListElement.parent().prepend(`<small class="scrum-list-total ${cssStoryPoints}">`+
+                    `<span class="scrum-light">${currentListDoneDisp}</span>/`+
+                    `${currentListTotalDisp}</small>`);
+                    
 				// display List progress bar
 				if ( currentListTotal > 0 )
 				{
@@ -310,13 +314,22 @@ AST = (function ( A ) {
 			return title.match( regexHeader );
 		};
 
+		var _isCardShown = function(element) {
+			return (currentCardElement.attr("class").split(" ").indexOf("hide") == -1);			
+		}
 
 		/**
 		 * Resets the header points and sets the header nicely
 		 */
 		var _finishHeader = function()
 		{
-			$( currentHeaderElement.find('.list-card-title')[0] ).prepend( '<small class="scrum-card-points'+((currentHeaderDone>currentHeaderTotal)?' overrun':'')+'"><span class="scrum-light">' + currentHeaderDone.toFixed( storyPointDecimals ) + '/</span>' + currentHeaderTotal.toFixed( storyPointDecimals ) + '</small>' );
+			$(currentHeaderElement.find('.list-card-title')[0] ).prepend('<small class="scrum-card-points'+
+                ((currentHeaderDone > currentHeaderTotal)?' overrun':'')+
+                '"><span class="scrum-light">' + 
+                currentHeaderDone.toFixed( storyPointDecimals ) + 
+                '/</span>' + 
+                currentHeaderTotal.toFixed( storyPointDecimals ) + 
+                '</small>' );
 			currentHeaderDone = currentHeaderTotal = 0;
 		};
 
