@@ -3,7 +3,7 @@ Contributing
 
 Please read this before submitting your Push Requests:
 
-- Follow the same SCSS/JavaScript coding conventions (and use TABS)
+- ~~Follow the same SCSS/JavaScript coding conventions (and use TABS)~~ (sorry, Xavi)
 - Test and run your code through JsHint before pushing
 - Comment, comment, comment. After approving the request we may remove some, but add comments everywhere so we know what's going on and why you coded it that way
 - Features that are not directly related to Agile SCRUM and Trello will not be considered

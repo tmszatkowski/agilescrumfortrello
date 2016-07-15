@@ -2,11 +2,11 @@ Agile SCRUM for Trello boards gives super-powers to your Trello boards by enabli
 
 - STORY POINTS: Set Story Points for Trello Cards
 - TIME SPENT: Set time spent on tasks.
+- FILTERING TIME SPENT: Discover how much time is spent based on particular criteria, e.g. who is the most / the least overbooked.
 - TAGS: Group Cards into tags, User Stories or projects, these are colored automagically to save you time.
 - PROGRESS BARS: Visualize your Sprint progress instantly with unobstrusive background progress bars on both cards and lists.
 - HEADER SEPARATORS: Use header separators to group cards inside lists.
 - VISUAL AIDS: Cards with more Story Points have a slightly increased font size so you can distinguish bigger from smaller tasks at a glance.
-
 
 Instructions
 ------------------
@@ -41,15 +41,15 @@ If a team member doesn't have the 'Agile SCRUM for Trello boards' extension inst
 Links & Resources
 ------------------
 - Google Chrome Store: https://chrome.google.com/webstore/detail/agile-scrum-for-trello-bo/njmflagahgdhopbcdilgahjlfiecakpe?hl=en
-- Source code: https://github.com/luckyshot/agilescrumfortrello
-- Issue tracker: https://github.com/luckyshot/agilescrumfortrello/issues
+- Source code: https://github.com/tmszatkowski/agilescrumfortrello based on https://github.com/luckyshot/agilescrumfortrello
+- Issue tracker: ~~https://github.com/luckyshot/agilescrumfortrello/issues~~
 - Blog post + Screenshots: http://xaviesteve.com/5109/agile-scrum-trello-boards/
-
-
-
 
 Changelog
 ------------------
+
+### 1.4.5
+- Display storypoints done / total based on filter criteria
 
 ### 1.4.4
 - Improved change detection through DOMSubtreeModified (thanks to JorgeBoscan)
