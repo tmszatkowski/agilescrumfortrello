@@ -83,8 +83,6 @@ var AST = AST || {};
                 var cardId = null,
                     cardDetailOpen = null;
 
-                _run();
-
                 $('.window-wrapper').bind("DOMSubtreeModified", function() {
                     if (window.location.href.match(regexShortLink) && !cardDetailOpen) {
                         cardId = regexShortLink.exec(window.location.href)[1];
@@ -95,8 +93,14 @@ var AST = AST || {};
                         _run();
                     }
                 });
-
-
+                
+                //We can try this trick, yet it will lead us nowhere...                
+                //$('#surface').bind("DOMSubtreeModified", this, function(arg){
+                //    if (!this.isModyfingDOM)
+                //        console.log('DOM changed ');
+                //    else
+                //        console.log('Is modyfiing DOM !');
+                //});
 
                 runTimer = setInterval(function() {
                     _checkForChanges();
@@ -110,6 +114,9 @@ var AST = AST || {};
              * See: https://github.com/luckyshot/agilescrumfortrello/issues/5
              */
             var _checkForChanges = function() {
+                if (!_isInBoardView())
+                    return;
+                
                 var currentChecksum = $('#board').html().length;
 
                 if (runTimerChecksum !== currentChecksum) {
@@ -185,10 +192,7 @@ var AST = AST || {};
                         {
                             currentCardTotal = _getNumber(currentCardTitle.match(regexNumberTotal)[0]);
                         }
-
-
-
-
+                        
                         // Card formatting
 
                         // Add red class if overrun
@@ -349,10 +353,11 @@ var AST = AST || {};
                 }
                 return 'hsla(' + (r % 256) + ',50%,40%,1)';
             };
-
-
-
-
+            
+            var _isInBoardView = function() {
+                return typeof $('#board').html() !== "undefined";
+            }
+            
             return A;
 
         })(AST || {});
