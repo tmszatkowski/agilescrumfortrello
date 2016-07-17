@@ -53,10 +53,6 @@ var AST = AST || {};
                 currentListDone = 0,
                 currentListTotal = 0,
 
-                currentHeaderElement = false,
-                currentHeaderDone = 0,
-                currentHeaderTotal = 0,
-
                 currentCardElement = false,
                 currentCardDone = 0,
                 currentCardTotal = 0,
@@ -120,6 +116,7 @@ var AST = AST || {};
                 var currentChecksum = $('#board').html().length;
 
                 if (runTimerChecksum !== currentChecksum) {
+                    console.log("board changed, updating...");
                     runTimerChecksum = currentChecksum;
                     _run();
                 }
@@ -148,7 +145,7 @@ var AST = AST || {};
 
                         // if the card is the textbox then ignore it
                         if (_isCardATextBox(currentCardElement)) {
-                            return -2;
+                            return;
                         }
 
 
@@ -161,34 +158,20 @@ var AST = AST || {};
                             currentCardTitle = currentCardElement.data('original');
                             $(currentCardElement).find('.list-card-title').html(currentCardTitle);
                         }
-
-
-
+                        
                         // Is Card a header?
                         if (_isCardAHeader(currentCardTitle)) {
-                            // If there's a previous header then process it and reset it
-                            if (currentHeaderTotal > 0) {
-                                _finishHeader();
-                            }
-                            // Set as the current header
-                            currentHeaderElement = currentCardElement;
-
                             // Style it (remove *** and add the CSS class)
-                            currentHeaderElement[0].innerHTML = currentHeaderElement[0].innerHTML.replace(/( ?\*\*\* ?)/g, '');
-                            currentHeaderElement.addClass('scrum-card-header');
+                            currentCardElement[0].innerHTML = currentCardElement[0].innerHTML.replace(/( ?\*\*\* ?)/g, '');
+                            currentCardElement.addClass('scrum-card-header');
                         }
-
-
-                        // Get card Story Points (fraction style)
-                        else if (currentCardTitle.match(regexFraction)) // (1/2)
+                        else if (currentCardTitle.match(regexFraction)) // Get card Story Points (fraction style) (1/2)
                         {
                             currentCardFraction = currentCardTitle.match(regexFraction)[0];
                             currentCardDone = _getNumber(currentCardFraction.match(regexFractionDone)[0]);
                             currentCardTotal = _getNumber(currentCardFraction.match(regexFractionTotal)[0]);
                         }
-
-                        // Get card Story Points (whole number style)
-                        else if (currentCardTitle.match(regexNumberTotal)) // (1)
+                        else if (currentCardTitle.match(regexNumberTotal)) // Get card Story Points (whole number style) (1)
                         {
                             currentCardTotal = _getNumber(currentCardTitle.match(regexNumberTotal)[0]);
                         }
@@ -227,28 +210,12 @@ var AST = AST || {};
                             currentListDone = currentListDone + currentCardDone;
                             currentListTotal = currentListTotal + currentCardTotal;
                         }
-
-                        // Update header Story Points if there is a current one
-                        if ((currentHeaderElement) && _isCardShown(currentCardElement)) {
-                            currentHeaderDone = currentHeaderDone + currentCardDone;
-                            currentHeaderTotal = currentHeaderTotal + currentCardTotal;
-                        }
-
+                        
                         // now reset the Card for the next one
                         currentCardElement = false;
                         currentCardTitle = currentCardFraction = '';
                         currentCardTotal = currentCardDone = 0;
-
-
                     }); // end loop Cards
-
-
-
-
-                    // last header
-                    if (currentHeaderTotal > 0) {
-                        _finishHeader();
-                    }
 
                     //Display List Story Points
                     var currentListDoneDisp = currentListDone.toFixed(storyPointDecimals);
@@ -297,22 +264,7 @@ var AST = AST || {};
 
             var _isCardShown = function(element) {
                 return (currentCardElement.attr("class").split(" ").indexOf("hide") == -1);
-            }
-
-            /**
-             * Resets the header points and sets the header nicely
-             */
-            var _finishHeader = function() {
-                $(currentHeaderElement.find('.list-card-title')[0]).prepend('<small class="scrum-card-points' +
-                    ((currentHeaderDone > currentHeaderTotal) ? ' overrun' : '') +
-                    '"><span class="scrum-light">' +
-                    currentHeaderDone.toFixed(storyPointDecimals) +
-                    '/</span>' +
-                    currentHeaderTotal.toFixed(storyPointDecimals) +
-                    '</small>');
-                currentHeaderDone = currentHeaderTotal = 0;
-            };
-
+            }          
 
             /**
              * Extract number from string
