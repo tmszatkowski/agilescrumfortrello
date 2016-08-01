@@ -90,12 +90,14 @@ var AST = AST || {};
                     }
                 });
                 
-                //We can try this trick, yet it will lead us nowhere...                
-                //$('#surface').bind("DOMSubtreeModified", this, function(arg){
-                //    if (!this.isModyfingDOM)
-                //        console.log('DOM changed ');
-                //    else
-                //        console.log('Is modyfiing DOM !');
+                //This is the approach that possibly will make the trick and allow to get rid of the ugly timer
+                //var observer = new MutationObserver(function(mutations, observer) {
+                //    console.log(mutations);
+                //});
+                //
+                //observer.observe(document, {
+                //  subtree: true,
+                //  attributes: true
                 //});
 
                 runTimer = setInterval(function() {
