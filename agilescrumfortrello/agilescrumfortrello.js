@@ -121,6 +121,10 @@ var AST = AST || {};
                     _run();
                 }
             };
+            
+            var _getNameOfCurrentBoard = function(currentListElement) {
+                return currentListElement.parent().find("h2").text();
+            }
 
 
             /**
@@ -196,8 +200,16 @@ var AST = AST || {};
                         if (currentCardTotal > 0) {
                             // Display Card progress bar
                             bodyWidth = currentCardDone / currentCardTotal * 100;
+                            
+                            // For tasks that were underestimated, give them a chance to be formatted as done,
+                            // as long as you are at "Done" tab.
+                            if (_getNameOfCurrentBoard(currentListElement) === "Done")
+                            {
+                                cssStoryPoints = ' perfect';
+                                bodyWidth = 100;                                
+                            }
+                            
                             currentCardElement.prepend('<div class="scrum-card-progress' + cssStoryPoints + '" style="background-color:' + bodyColor + ';width:' + (bodyWidth <= 100 ? bodyWidth : 100) + '%"></div>');
-
                             // Increase card font size depending on its SP
                             $(currentCardElement[0])
                                 .css('font-size', ((currentCardTotal < 8) ? (90 + (5 * currentCardTotal)) : 130) + '%')
